@@ -1,4 +1,3 @@
-# Stage 1: Build React (Vite) app
 FROM node:20-alpine AS build
 
 WORKDIR /app
@@ -6,15 +5,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-# Copy .env explicitly before source (important for caching)
 COPY .env .env
 
-# Copy source code
 COPY . .
 
 RUN npm run build
 
-# Stage 2: Serve with Nginx
 FROM nginx:stable-alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
